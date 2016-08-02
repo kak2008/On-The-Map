@@ -21,6 +21,9 @@ class InformationPostingViewController: UIViewController {
     @IBOutlet weak var findOnAMapButton: UIButton!
     @IBOutlet weak var textLabel: UILabel!
     
+    @IBOutlet weak var activityIndicatorInfoVC: UIActivityIndicatorView!
+    
+    
     var selectedTextField: UITextField!
     var locationCoordinate: CLLocationCoordinate2D!
     var errorOccured: Bool = false
@@ -33,7 +36,9 @@ class InformationPostingViewController: UIViewController {
     {
         super.viewDidLoad()
         
+        infoMapViewer.userInteractionEnabled = false
         hideUIElements(true)
+        activityIndicatorInfoVC.stopAnimating()
     }
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?)
@@ -73,30 +78,7 @@ class InformationPostingViewController: UIViewController {
     }
 
     
-    // MARK: - Webservice call for posting user location
-    
-    func postStudentInformation()
-    {
-        let httpBodyString = "{\"uniqueKey\": \"\(userLocMang.loginUserUniqueKey)\", \"firstName\": \"\(userLocMang.loginUserFirstName)\", \"lastName\": \"\(userLocMang.loginUserLastName)\",\"mapString\": \"\(userLocMang.loginUserMapString)\", \"mediaURL\": \"\(userLocMang.loginUserMediaUrl)\",\"latitude\": \(userLocMang.userEnteredLocationLatitude), \"longitude\":\(userLocMang.userEnteredLocationLongitude)}"
-        print(httpBodyString)
-        let request = NSMutableURLRequest(URL: NSURL(string: "https://api.parse.com/1/classes/StudentLocation")!)
-        request.HTTPMethod = "POST"
-        request.addValue("QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr", forHTTPHeaderField: "X-Parse-Application-Id")
-        request.addValue("QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY", forHTTPHeaderField: "X-Parse-REST-API-Key")
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.HTTPBody = httpBodyString.dataUsingEncoding(NSUTF8StringEncoding)
-        let session = NSURLSession.sharedSession()
-        let task = session.dataTaskWithRequest(request) { data, response, error in
-            if error != nil
-            {
-                self.createAlertWithMessage("Network Error", message: "We are not able to process the request, please try again later.")
-                return
-            }
-            self.dismissViewControllerAnimated(true, completion: nil)
-         //   print(NSString(data: data!, encoding: NSUTF8StringEncoding))
-        }
-        task.resume()
-    }
+
     
     
     // MARK: - Alert Action
@@ -105,7 +87,10 @@ class InformationPostingViewController: UIViewController {
     {
         let UIAlert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
         UIAlert.addAction(UIAlertAction(title: "ok",style: .Default, handler: {(ACTION:UIAlertAction!) in }))
-        presentViewController(UIAlert, animated: true, completion: nil)
+        dispatch_async(dispatch_get_main_queue())
+        {
+            self.presentViewController(UIAlert, animated: true, completion: nil)
+        }
     }
     
     
@@ -138,7 +123,22 @@ class InformationPostingViewController: UIViewController {
         else
         {
             //post user information
-            postStudentInformation()
+            let api = APIClient()
+            api.postStudentInformation({ (errorMessage) in
+                // Failure Block
+                var message = errorMessage
+                if message == "" {
+                    message = "We are not able to process the request, please try again later."
+                }
+                
+                self.createAlertWithMessage("Submission Failed", message: message)
+                
+                }) {
+                    // Success Block
+                    dispatch_async(dispatch_get_main_queue(), {
+                        self.dismissViewControllerAnimated(true, completion: nil)
+                    })
+            }
         }
     }
     
@@ -157,6 +157,7 @@ class InformationPostingViewController: UIViewController {
     {
         hideUIElements(false)
         captureGeoLocation()
+        activityIndicatorInfoVC.startAnimating()
     }
     
     func captureGeoLocation()
@@ -169,12 +170,14 @@ class InformationPostingViewController: UIViewController {
         geoCode.geocodeAddressString((userEnteredAddress.text!), completionHandler: { (placemark, error) in
             if (error != nil)
             {
+                self.activityIndicatorInfoVC.stopAnimating()
                 self.errorOccured = true
                 self.createAlertWithMessage("Error Location", message: "Could not find the location, Try Again..!")
                 self.hideUIElements(true)
             }
             if let placemark = placemark?.first
             {
+                self.activityIndicatorInfoVC.stopAnimating()
                 self.activeUISecondSetElements(true)
                 let coordinates: CLLocationCoordinate2D = placemark.location!.coordinate
                 self.locationCoordinate = coordinates

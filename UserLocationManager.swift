@@ -20,13 +20,19 @@ class UserLocationManager: NSObject
     
     var userEnteredLocationLatitude: Double!
     var userEnteredLocationLongitude: Double!
+    
+    var userEnteredUdacityEmailID: String!
+    var userEnteredUdacityPassword: String!
 
     
     // MARK: - Webservice call for Users Location Details
     
     func getUserLocations(completion:() -> Void)
     {
-        let request = NSMutableURLRequest(URL: NSURL(string: "https://api.parse.com/1/classes/StudentLocation")!)
+     
+        let BASE_URL = "https://api.parse.com/1/classes/StudentLocation?limit=100&order=-updatedAt"
+        
+        let request = NSMutableURLRequest(URL: NSURL(string: BASE_URL)!)
         request.addValue("QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr", forHTTPHeaderField: "X-Parse-Application-Id")
         request.addValue("QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY", forHTTPHeaderField: "X-Parse-REST-API-Key")
         let session = NSURLSession.sharedSession()
@@ -55,8 +61,13 @@ class UserLocationManager: NSObject
         
     }
     
-    // MARK: - Webservice call for getting user details
+
     
+    
+ 
+
+    // MARK: - Webservice call for getting user details
+
     func getLoginUserDetails()
     {
         let request = NSMutableURLRequest(URL: NSURL(string: "https://www.udacity.com/api/users/\(loginUserUniqueKey)")!)
@@ -87,5 +98,7 @@ class UserLocationManager: NSObject
     {
         completion(result: "we finished!")
     }
-    
+
 }
+    
+

@@ -10,10 +10,8 @@ import UIKit
 
 class User: NSObject
 {
-    var userEmailID: String!
-    var accountKey: String!
-    var sessionID: String!
-    var sessionExpiration: String!
+    var userStruct = UserInfo()
+    
     
     static let sharedInstance = User()
     
@@ -22,14 +20,14 @@ class User: NSObject
     func updateUserCredentials(userJsonResponse: NSDictionary)
     {
         let accountJson = userJsonResponse["account"] as! NSDictionary
-        accountKey = accountJson["key"] as! String
+        userStruct.accountKey = accountJson["key"] as! String
         
         let userLMObj = UserLocationManager.locationManagerSharedInstance
-        userLMObj.loginUserUniqueKey = accountKey
+        userLMObj.loginUserUniqueKey = userStruct.accountKey
         
         let sessionJson = userJsonResponse["session"] as! NSDictionary
-        sessionID = sessionJson["id"] as! String
-        sessionExpiration = sessionJson["expiration"] as! String
+        userStruct.sessionID = sessionJson["id"] as! String
+        userStruct.sessionExpiration = sessionJson["expiration"] as! String
         
     }
     

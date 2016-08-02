@@ -18,6 +18,19 @@ class LocationListTableViewController: UITableViewController {
         super.viewDidLoad()
 
     }
+    
+    
+    // MARK: - Alert Methods
+    
+    // Alert Message with Ok Action
+    func createAlertWithMessage(title: String, message: String)
+    {
+        let UIAlert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
+        UIAlert.addAction(UIAlertAction(title: "ok",style: .Default, handler: {(ACTION:UIAlertAction!) in }))
+        dispatch_async(dispatch_get_main_queue()) {
+            self.presentViewController(UIAlert, animated: true, completion: nil)
+        }
+    }
 
 
     // MARK: - Table View data source
@@ -79,10 +92,25 @@ class LocationListTableViewController: UITableViewController {
     }
     
     
-    // MARK: - Pin Button Pressed Actions
+    // MARK: - Logout Button Pressed Actions
 
     @IBAction func LogoutButtonPressed(sender: AnyObject)
     {
-        dismissViewControllerAnimated(true, completion: nil)
-    }
+            let api = APIClient()
+            
+            api.LogoutStudentSession({ (errorMessage) in
+                // failure case
+                var message = errorMessage
+                if message == "" {
+                    message = "We are not able to process the request, please try again later."
+                }
+                
+                self.createAlertWithMessage("Logout", message: message)
+            }) {
+                // success case
+                dispatch_async(dispatch_get_main_queue(), {
+                    self.dismissViewControllerAnimated(true, completion: nil)
+                })
+        }
+        }
 }

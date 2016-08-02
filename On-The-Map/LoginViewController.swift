@@ -17,7 +17,14 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate
     @IBOutlet weak var loginButtonOutlet: UIButton!
     @IBOutlet weak var signUpButtonOutlet: UIButton!
     
+    
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    
     var selectedTextField: UITextField!
+    
+    let UserlocManger = UserLocationManager.locationManagerSharedInstance
+    
+    static let loginViewSharedInstance = LoginViewController()
     
     let loginButton: FBSDKLoginButton =
         {
@@ -40,6 +47,7 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate
         
         self.addConstraintsToFacebookButton(loginButton)
         signUpButtonOutlet.enabled = true
+        activityIndicator.stopAnimating()
 
     }
     
@@ -70,7 +78,9 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate
     {
         let UIAlert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
         UIAlert.addAction(UIAlertAction(title: "ok",style: .Default, handler: {(ACTION:UIAlertAction!) in }))
-        presentViewController(UIAlert, animated: true, completion: nil)
+        dispatch_async(dispatch_get_main_queue()) {
+            self.presentViewController(UIAlert, animated: true, completion: nil)
+        }
     }
 
     
@@ -136,6 +146,11 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate
 
     @IBAction func LoginButtonPressed(sender: AnyObject)
     {
+      
+        // Activity Indicator
+        activityIndicator.hidden = false
+        activityIndicator.startAnimating()
+        
         // create Alert if emailID is nil
         if emailIDTextField.text == ""
         {
@@ -153,58 +168,36 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate
         // Disable login Button
         loginButtonOutlet.enabled = false
         
-        //print("username: \(self.emailIDTextField.text! as String)")
-        let request = NSMutableURLRequest(URL: NSURL(string: "https://www.udacity.com/api/session")!)
-        request.HTTPMethod = "POST"
-        request.addValue("application/json", forHTTPHeaderField: "Accept")
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.HTTPBody = "{\"udacity\": {\"username\": \"\(emailIDTextField.text!)\", \"password\": \"\(passwordTextField.text!)\"}}".dataUsingEncoding(NSUTF8StringEncoding)
-        let session = NSURLSession.sharedSession()
-        let task = session.dataTaskWithRequest(request) { data, response, error in
-            if error != nil
-            {
-                // create Error Alert
-                self.createAlertWithMessage("Login Failed", message: "We are not able to process the request, please try again later.")
-                return
-            }
-            let newData = data!.subdataWithRange(NSMakeRange(5, data!.length - 5)) /* subset response data! */
-         //   print(NSString(data: newData, encoding: NSUTF8StringEncoding))
-            
-            do {
+        
+        let api = APIClient()
+        
+        api.checkUdacityLogin(emailIDTextField.text!, password: passwordTextField.text!, failure: { (errorMessage) in
+            // failure block
+            dispatch_async(dispatch_get_main_queue(), { 
+                self.activityIndicator.stopAnimating()
                 self.loginButtonOutlet.enabled = true
-                let json = try NSJSONSerialization.JSONObjectWithData(newData, options: .AllowFragments) as! NSDictionary
-                //print("JSON Data >> \(json)")
+            })
             
-                // Checking whether json value exists or not
-                if(json.valueForKey("status") != nil)
-                {
-                    let jsonStatus = json .valueForKey("status") as! NSNumber
-                    let errorMessage = json["error"] as! String
-              
-                    if (jsonStatus == 403)
-                    {
-                        dispatch_async(dispatch_get_main_queue(), {
-                        self.createAlertWithMessage("Login Failed", message: errorMessage)
-                        })
-                        return
-                    }
-                }
-
-                let user = User.sharedInstance
-                user.updateUserCredentials(json)
+            var message = errorMessage
+            if message == "" {
+                message = "We are not able to process the request, please try again later."
+            }
+            
+            self.createAlertWithMessage("Login Failed", message: message)
+            
+            }) {
+                // Success block
                 let userLM = UserLocationManager.locationManagerSharedInstance
                 userLM.getLoginUserDetails()
                 
-                // segue call
                 dispatch_async(dispatch_get_main_queue(), {
+                    self.activityIndicator.stopAnimating()
+                    self.loginButtonOutlet.enabled = true
+                    
+                    // segue call
                     self.performSegueWithIdentifier("loginScreenToTabViewSegue", sender: self)
                 })
-            }
-            catch {
-                
-            }
         }
-        task.resume()
     }
 
     
