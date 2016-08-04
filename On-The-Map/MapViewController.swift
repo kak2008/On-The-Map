@@ -30,10 +30,24 @@ class MapViewController: UIViewController, MKMapViewDelegate
     func getUserDetails()
     {
         let getUserLoc = UserLocationManager()
-        getUserLoc.getUserLocations {
-            self.dropPinAnnotation()
+        
+        getUserLoc.getUserLocations({ (errorMessage) in
+            // Failure block
+            var message = errorMessage
+            if message == "" {
+                message = "We are not able to process the request, please try again later."
+            }
+            dispatch_async(dispatch_get_main_queue(), { 
+                self.createAlertWithMessage("Reloading Failed", message: message)
+
+            })
+
+            }) { 
+                // Success block
+                self.dropPinAnnotation()
         }
     }
+    
     
     // MARK: - Alert Methods
     

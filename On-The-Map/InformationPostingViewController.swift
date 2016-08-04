@@ -165,7 +165,6 @@ class InformationPostingViewController: UIViewController {
         let userEnteredAddress = self.userEnteredLocation
         self.userLocMang.loginUserMapString = userEnteredAddress.text!
         let geoCode = CLGeocoder()
-//        print(userEnteredAddress.text!)
         
         geoCode.geocodeAddressString((userEnteredAddress.text!), completionHandler: { (placemark, error) in
             if (error != nil)

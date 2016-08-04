@@ -16,7 +16,6 @@ class LocationListTableViewController: UITableViewController {
     override func viewDidLoad()
     {
         super.viewDidLoad()
-
     }
     
     
@@ -45,8 +44,12 @@ class LocationListTableViewController: UITableViewController {
     {
         // #warning Incomplete implementation, return the number of rows
         let object = User.sharedInstance
-        return object.userJsonDetailsArray.count
+        if object.userJsonDetailsArray != nil
+        {
+            return object.userJsonDetailsArray.count
+        }
         
+        return 0
     }
 
     
@@ -85,10 +88,21 @@ class LocationListTableViewController: UITableViewController {
     @IBAction func refreshButtonPressed(sender: AnyObject)
     {
         let getUserLoc = UserLocationManager()
-        getUserLoc.getUserLocations {
+        
+        getUserLoc.getUserLocations({ (errorMessage) in
+            // Failure block
+            var message = errorMessage
+            if message == "" {
+                message = "We are not able to process the request, please try again later."
+            }
+            dispatch_async(dispatch_get_main_queue(), {
+                self.createAlertWithMessage("Reloading Failed", message: message)
+            })
+            
+        }) {
+            // Success block
             self.tableView.reloadData()
         }
-        // refresh button is pressed
     }
     
     

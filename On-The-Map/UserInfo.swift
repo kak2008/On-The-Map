@@ -15,4 +15,17 @@ struct UserInfo
     var sessionID: String!
     var sessionExpiration: String!
     
+    init() {
+        
+    }
+    
+    init (email: String, json: NSDictionary) {
+        let accountJson = json["account"] as! NSDictionary
+        let sessionJson = json["session"] as! NSDictionary
+        
+        userEmailID = email;
+        accountKey = accountJson["key"] as! String
+        sessionID = sessionJson["id"] as! String
+        sessionExpiration = sessionJson["expiration"] as! String
+    }
 }

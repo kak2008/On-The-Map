@@ -59,8 +59,11 @@ class APIClient: NSObject {
                     return
                 }
                 
-                let user = User.sharedInstance
-                user.updateUserCredentials(json)
+                let sharedUser = User.sharedInstance;
+                sharedUser.userStruct = UserInfo(email: email, json: json);
+                
+                let userLMObj = UserLocationManager.locationManagerSharedInstance
+                userLMObj.loginUserUniqueKey = sharedUser.userStruct.accountKey
                 
                 success()
                 print("login Sucess!")
@@ -177,7 +180,6 @@ class APIClient: NSObject {
                         return
                     }
                     //TODO: Notify the caller that this is an error
-                    //    print("login failed with status, \(json["error"])")
                     failure(errorMessage: json["error"] as! String)
                     
                     return

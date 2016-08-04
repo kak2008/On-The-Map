@@ -27,7 +27,7 @@ class UserLocationManager: NSObject
     
     // MARK: - Webservice call for Users Location Details
     
-    func getUserLocations(completion:() -> Void)
+    func getUserLocations(failure: (errorMessage: String) -> Void, success: () -> Void)
     {
      
         let BASE_URL = "https://api.parse.com/1/classes/StudentLocation?limit=100&order=-updatedAt"
@@ -41,17 +41,32 @@ class UserLocationManager: NSObject
             
             if error != nil
             { // Handle error...
+                failure(errorMessage: "")
+                
                 return
             }
             //      print(NSString(data: data!, encoding: NSUTF8StringEncoding))
             
             do
             {
+                // Convert the data to JSON
                 let jsonDetails = try NSJSONSerialization.JSONObjectWithData(data!, options: .AllowFragments) as! NSDictionary
+
+                
+                
+                // Check for server error
+                if(jsonDetails.valueForKey("error") != nil) {
+                    let errorMsg = jsonDetails["error"] as! String
+                    failure(errorMessage: errorMsg)
+                    
+                    return
+                }
+                
                 let userDetailsArray = jsonDetails["results"] as! NSArray
                 let userObject = User.sharedInstance
                 userObject.userJsonDetailsArray = userDetailsArray
-                completion()
+                success()
+                print("Reloading completed")
             }
             catch
             {
