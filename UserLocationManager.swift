@@ -26,7 +26,7 @@ class UserLocationManager: NSObject
 
     
     // MARK: - Webservice call for Users Location Details
-    
+    /** Brings students locations from webservice */
     func getUserLocations(failure: (errorMessage: String) -> Void, success: () -> Void)
     {
      
@@ -76,13 +76,10 @@ class UserLocationManager: NSObject
         
     }
     
-
-    
-    
  
 
     // MARK: - Webservice call for getting user details
-
+    /** Fetches Login User Details*/
     func getLoginUserDetails()
     {
         let request = NSMutableURLRequest(URL: NSURL(string: "https://www.udacity.com/api/users/\(loginUserUniqueKey)")!)
@@ -97,8 +94,6 @@ class UserLocationManager: NSObject
             
             do {
                 let jsonData = try NSJSONSerialization.JSONObjectWithData(newData, options: .AllowFragments) as! NSDictionary
-      //          print("json Data: \(jsonData)")
-                
             let userData = jsonData.valueForKey("user")
             self.loginUserFirstName = userData! .valueForKey("first_name") as! String!
             self.loginUserLastName = userData! .valueForKey("last_name") as! String!

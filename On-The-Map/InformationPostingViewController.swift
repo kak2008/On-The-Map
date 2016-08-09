@@ -23,7 +23,6 @@ class InformationPostingViewController: UIViewController {
     
     @IBOutlet weak var activityIndicatorInfoVC: UIActivityIndicatorView!
     
-    
     var selectedTextField: UITextField!
     var locationCoordinate: CLLocationCoordinate2D!
     var errorOccured: Bool = false
@@ -61,7 +60,7 @@ class InformationPostingViewController: UIViewController {
 
     // MARK: - Hide/Unhide UI Elements
     
-    // hide Map, TextField and Submit Button
+    /** Hides Map, TextField and Submit Button */
     func hideUIElements(GivenValue: Bool)
     {
         infoMapViewer.hidden = GivenValue
@@ -69,7 +68,7 @@ class InformationPostingViewController: UIViewController {
         submitButton.hidden = GivenValue
     }
     
-    // Unhide TextFields and Find Location Button
+    /** Unhide TextFields and Find Location Button */
     func activeUISecondSetElements(givenValue: Bool)
     {
         userEnteredLocation.hidden = givenValue
@@ -78,11 +77,8 @@ class InformationPostingViewController: UIViewController {
     }
 
     
-
-    
-    
     // MARK: - Alert Action
-    
+    /** Creates Alert with Message & Ok Action */
     func createAlertWithMessage(title: String, message: String)
     {
         let UIAlert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
@@ -95,7 +91,7 @@ class InformationPostingViewController: UIViewController {
     
     
     // MARK: - Create Annotation for User Location
-    
+    /** Creates Annotation to the Map Viewer */
     func createMapAnnotation()
     {
         // create Annotation
@@ -160,6 +156,8 @@ class InformationPostingViewController: UIViewController {
         activityIndicatorInfoVC.startAnimating()
     }
     
+    
+    /** Captures the Geo Location specified by user */
     func captureGeoLocation()
     {
         let userEnteredAddress = self.userEnteredLocation
@@ -202,7 +200,7 @@ class InformationPostingViewController: UIViewController {
         selectedTextField = textField
     }
     
-    // Calculation of keyBoard Height
+    /** Calculation of keyBoard Height */
     func getKeyboardHeight(notification: NSNotification) -> CGFloat
     {
         let userInfo = notification.userInfo
@@ -210,7 +208,7 @@ class InformationPostingViewController: UIViewController {
         return keyboardSize.CGRectValue().height
     }
     
-    // Move frame upward
+    /** Moves frame upward */
     func keyboardWillShow(notification: NSNotification)
     {
         if ((selectedTextField != nil && (selectedTextField == userEnteredLocation || selectedTextField == linkTextField)) && self.view.frame.origin.y == 0.0)
@@ -224,7 +222,7 @@ class InformationPostingViewController: UIViewController {
         }
     }
     
-    // Move frame back to its original position
+    /** Moves frame back to its original position */
     func keyboardWillHide(notification: NSNotification)
     {
         if -self.view.frame.origin.y > 0
@@ -233,14 +231,14 @@ class InformationPostingViewController: UIViewController {
         }
     }
     
-    //Suscribe the view controller to the UIKeyboardWillShowNotification:
+    /** Suscribe the view controller to the UIKeyboardWillShowNotification: */
     func subscribeToKeyboardNotification()
     {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(LoginViewController.keyboardWillShow(_:)), name: UIKeyboardWillShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(LoginViewController.keyboardWillHide(_:)), name: UIKeyboardWillHideNotification, object: nil)
     }
     
-    //Unsubscribe the view controller to the UIKeyboardWillShowNotification:
+    /** Unsubscribe the view controller to the UIKeyboardWillShowNotification: */
     func unsubsribeToKeyboardNotification()
     {
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillShowNotification, object: nil)

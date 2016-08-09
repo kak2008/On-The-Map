@@ -10,9 +10,8 @@ import Foundation
 
 class APIClient: NSObject {
     
-    
     // MARK: - Login Button Pressed, User Authentication
-    
+    /** Checks user Udacity Authentication and returns failure & success cases */
     func checkUdacityLogin(email: String, password: String, failure: (errorMessage: String) -> Void, success: () -> Void) {
         // Create Request
         let request = NSMutableURLRequest(URL: NSURL(string: "https://www.udacity.com/api/session")!)
@@ -82,6 +81,7 @@ class APIClient: NSObject {
     
     // MARK: - Webservice call for posting user location
     
+    /** Posts student information to webservice */
     func postStudentInformation(failure: (errorMessage: String) -> Void, success: () -> Void)
     {
         // Creating user location manager shared instance object
@@ -143,6 +143,8 @@ class APIClient: NSObject {
     
 
     // MARK: - Webservice call for logout 
+    
+    /** Logouts user session  */
     func LogoutStudentSession(failure: (errorMessage: String) -> Void, success: () -> Void)
     {
         let request = NSMutableURLRequest(URL: NSURL(string: "https://www.udacity.com/api/session")!)

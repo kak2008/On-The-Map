@@ -73,7 +73,7 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate
 
     // MARK: - Alert Methods
 
-    // Alert Message with Ok Action for error in email ID and Password
+    /** Alert Message with Ok Action for error in email ID and Password */
     func createAlertWithMessage(title: String, message: String)
     {
         let UIAlert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
@@ -97,7 +97,7 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate
         selectedTextField = textField
     }
     
-    // Calculation of keyBoard Height
+    /** Calculation of keyBoard Height */
     func getKeyboardHeight(notification: NSNotification) -> CGFloat
     {
         let userInfo = notification.userInfo
@@ -105,7 +105,7 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate
         return keyboardSize.CGRectValue().height
     }
     
-    // Move frame upward
+    /** Move frame upward */
     func keyboardWillShow(notification: NSNotification)
     {
         if ((selectedTextField != nil && (selectedTextField == emailIDTextField || selectedTextField == passwordTextField)) && self.view.frame.origin.y == 0.0)
@@ -119,7 +119,7 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate
         }
     }
     
-    // Move frame back to its original position
+    /** Move frame back to its original position */
     func keyboardWillHide(notification: NSNotification)
     {
         if -self.view.frame.origin.y > 0
@@ -128,14 +128,14 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate
         }
     }
     
-    //Suscribe the view controller to the UIKeyboardWillShowNotification:
+    /** Suscribe the view controller to the UIKeyboardWillShowNotification: */
     func subscribeToKeyboardNotification()
     {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(LoginViewController.keyboardWillShow(_:)), name: UIKeyboardWillShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(LoginViewController.keyboardWillHide(_:)), name: UIKeyboardWillHideNotification, object: nil)
     }
     
-    //Unsubscribe the view controller to the UIKeyboardWillShowNotification:
+    /** Unsubscribe the view controller to the UIKeyboardWillShowNotification: */
     func unsubsribeToKeyboardNotification()
     {
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillShowNotification, object: nil)

@@ -26,7 +26,7 @@ class MapViewController: UIViewController, MKMapViewDelegate
     }
  
     // MARK: - User Details Webservice call 
-  
+    /** user details webservice call */
     func getUserDetails()
     {
         let getUserLoc = UserLocationManager()
@@ -51,7 +51,7 @@ class MapViewController: UIViewController, MKMapViewDelegate
     
     // MARK: - Alert Methods
     
-    // Alert Message with Ok Action
+    /** Alert Message with Ok Action */
     func createAlertWithMessage(title: String, message: String)
     {
         let UIAlert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
@@ -63,7 +63,7 @@ class MapViewController: UIViewController, MKMapViewDelegate
     
     // MARK: - Drop Pin MAP Annotations Actions
     
-    // Annotation
+    /** Annotation */
     func dropPinAnnotation()
     {
         if let items = User.sharedInstance.userJsonDetailsArray
@@ -90,7 +90,7 @@ class MapViewController: UIViewController, MKMapViewDelegate
         }
     }
     
-    // Annotation Detail Accessory
+    /** Annotation Detail Accessory */
     func mapView(mapView: MKMapView, viewForAnnotation annotation: MKAnnotation) -> MKAnnotationView?
     {
         let mkPinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: "pinDrop")
@@ -103,7 +103,7 @@ class MapViewController: UIViewController, MKMapViewDelegate
     }
     
     
-    // Accessory Tapped
+    /** Accessory Tapped */
     func mapView(mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl)
     {
         

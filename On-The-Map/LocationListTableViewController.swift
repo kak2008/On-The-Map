@@ -21,7 +21,7 @@ class LocationListTableViewController: UITableViewController {
     
     // MARK: - Alert Methods
     
-    // Alert Message with Ok Action
+    /** Alert Message with Ok Action */
     func createAlertWithMessage(title: String, message: String)
     {
         let UIAlert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
