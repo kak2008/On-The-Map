@@ -14,9 +14,9 @@ In order to run this app. Download the repository, open it on XCode, build & run
 
 ## Implementation
 This app has two view controllers:
-- __Travel Location View Controller__: - This view controller shows the map and allows user to drop pins all over the world. Whenever user tap on dropped pin, photos are fetched from flickr at that particular location coordinates. User can delete pins in edit mode of this view controller.
+- __Login View Controller__: - This view controller allows user to login either using Udacity or Facebook credentials. 
 
-- __Photo Album View Controller__: - This view controller will show map with selected drop pin and photo album. All the downloaded photos will be updated in the photo album for selected pin location. New collection button will fetch new photos for the location. User has a chance to delete photos in the edit mode of this view controller.   
+- __Map View Controller__: - This view controller will show map with drop pins of the other udacity users.    
 
 - Application uses CoreData, MapKit, UIKit.
 
