@@ -18,7 +18,7 @@ This app has two view controllers:
 
 - __Map View Controller__: - This view controller will show map with drop pins of the other udacity users.    
 
-- Application uses CoreData, MapKit, UIKit.
+- Application uses MapKit, UIKit.
 
 ## Requirements
 * Xcode 7.3
