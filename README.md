@@ -2,11 +2,8 @@
 
 This app contains a map which will show information posted by other students with authentication of udacity servers or Facebook. The map will contain pins that show the location where other students have reported studying. By tapping on the pin users can see a URL for something the student finds interesting. The user will be able to add their own data by posting a string that can be reverse geocoded to a location, and a URL.
 
-App allows user to login 
+App allows user to login through either Udacity or Facebook credentials. User will be able to see locations posted by other udacity users. Pins will be dropped on the map according to the latitude & longitude locations provided by other udacity users.  
 
-This app allows user to drop pins on the map.
-Users will then be able to download pictures for the location.
-persist both the pictures, and the association of the pictures with the pin.
 
 
 ## Installation
