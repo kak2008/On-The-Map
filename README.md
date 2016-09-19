@@ -13,7 +13,7 @@ In order to run this app. Download the repository, open it on XCode, build & run
 ![alt tag](https://github.com/kak2008/On-The-Map/blob/master/Screen%20shots/Screen%20Shot.png)
 
 ## Implementation
-This app has two view controllers:
+This app has multiple view controllers:
 - __Login View Controller__: - This view controller allows user to login either using Udacity or Facebook credentials. 
 
 - __Map View Controller__: - This view controller will show map with drop pins of the other udacity users.   
