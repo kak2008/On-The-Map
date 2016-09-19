@@ -16,7 +16,12 @@ In order to run this app. Download the repository, open it on XCode, build & run
 This app has two view controllers:
 - __Login View Controller__: - This view controller allows user to login either using Udacity or Facebook credentials. 
 
-- __Map View Controller__: - This view controller will show map with drop pins of the other udacity users.    
+- __Map View Controller__: - This view controller will show map with drop pins of the other udacity users.   
+
+- __Location List View Controller__: - This view controller will show details of the other udacity users postings in list format and when user tap on the cell, webpage will be opened accordingly.
+ 
+- __Information posting View Controller__: - This view controller will let user to post their location in the textfield and post weblink.     
+
 
 - Application uses MapKit, UIKit.
 
