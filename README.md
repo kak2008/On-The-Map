@@ -22,7 +22,6 @@ This app has two view controllers:
  
 - __Information posting View Controller__: - This view controller will let user to post their location in the textfield and post weblink.     
 
-
 - Application uses MapKit, UIKit.
 
 ## Requirements
