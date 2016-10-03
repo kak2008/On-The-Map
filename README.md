@@ -22,7 +22,7 @@ This app has multiple view controllers:
  
 - __Information posting View Controller__: - This view controller will let user to post their location in the textfield and post weblink.     
 
-- Application uses MapKit, UIKit.
+- Application uses MapKit, UIKit, Udacity & facebook authentication.
 
 ## Requirements
 * Xcode 7.3
